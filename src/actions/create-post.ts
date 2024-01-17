@@ -58,9 +58,32 @@ export async function createPost(
         }
     }
 
-    return {
-        errors: {},
-    };
+    let post: Post;
+    try {
+        post = await db.post.create({
+            data: {
+                title: result.data.title,
+                content: result.data.content,
+                userId: session.user.id,
+                topicId: topic.id
+            }
+        })
+    } catch (e) {
+        if (e instanceof Error) {
+            return {
+                errors: {
+                    _form: [e.message]
+                }
+            }
+        } else {
+            return {
+                errors: {
+                    _form: ['Failed to create a post']
+                }
+            }
+        }
+    }
 
-    // TODO: revalidate the topic show page
+    revalidatePath(paths.topicShow(slug));
+    redirect(paths.postShow(slug, post.id));
 }
