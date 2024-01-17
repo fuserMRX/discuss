@@ -8,6 +8,11 @@ export type PostWithData = (
         _count: { comments: number };
     }
 )
+// or
+// export type PostWithData = Awaited<
+//     ReturnType<typeof fetchPostsByTopicSlug>
+// >[number];
+// but without Promise<PostWithData[]>
 
 export function fetchPostsByTopicSlug(slug: string): Promise<PostWithData[]> {
     return db.post.findMany({
