@@ -6,6 +6,8 @@ interface PostShowProps {
 }
 
 export default async function PostShow({ postId }: PostShowProps) {
+  await new Promise(resolve => setTimeout(resolve, 2500));
+
   //  don't go crazy with re-use
   // this is a simple component - why don't use simple query here
   const post = await db.post.findFirst({
